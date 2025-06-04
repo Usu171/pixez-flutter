@@ -1,0 +1,57 @@
+name: Build Flutter Android APK
+
+on:
+  push:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: test
+
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.29.x
+          channel: stable
+
+      - name: Check Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ./
+
+      - name: Run build_runner
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+        working-directory: ./
+
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+
+      - name: Create key.properties
+        run: echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
+
+      - name: Build Release APK
+        run: |
+          flutter build apk --release
+        working-directory: ./
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixez-android.apk
+          path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk

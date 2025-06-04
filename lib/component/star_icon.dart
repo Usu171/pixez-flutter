@@ -50,8 +50,8 @@ class _StarIconState extends State<StarIcon> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 50,
+      height: 50,
       color: Colors.transparent,
       child: _buildData(state),
     );

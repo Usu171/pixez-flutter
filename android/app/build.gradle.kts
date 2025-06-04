@@ -53,12 +53,13 @@ val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+    println("11111")
 }
 
 val packageName = if (dartEnvironmentVariables["IS_GOOGLEPLAY"] as Boolean) {
     "com.perol.play.pixez"
 } else {
-    "com.perol.pixez"
+    "com.perol.pixey"
 }
 
 android {
@@ -97,10 +98,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = "a"
+            keyPassword = "114514"
+            storeFile = "keystore.jks"?.let { file(it) }
+            storePassword = "114514"
         }
     }
 
