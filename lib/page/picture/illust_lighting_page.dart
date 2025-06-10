@@ -393,9 +393,6 @@ class _IllustVerticalPageState extends State<IllustVerticalPage>
       controller: _refreshController,
       header: PixezDefault.header(context),
       footer: PixezDefault.footer(context),
-      onLoad: () {
-        _aboutStore.next();
-      },
       child: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -412,68 +409,7 @@ class _IllustVerticalPageState extends State<IllustVerticalPage>
                 _loadAbout();
               },
             ),
-          ),
-          SliverGrid(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                var list = _aboutStore.illusts
-                    .map((element) => IllustStore(element.id, element))
-                    .toList();
-                return InkWell(
-                  onTap: () {
-                    Leader.push(
-                        context,
-                        PictureListPage(
-                          iStores: list,
-                          lightingStore: null,
-                          store: list[index],
-                        ));
-                  },
-                  onLongPress: () async {
-                    if (userSetting.longPressSaveConfirm) {
-                      final result = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(I18n.of(context).save),
-                              content: Text(list[index].illusts?.title ?? ""),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(I18n.of(context).cancel),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text(I18n.of(context).ok),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-                      if (!result) {
-                        return;
-                      }
-                    }
-                    if (userSetting.starAfterSave &&
-                        (_illustStore.state == 0)) {
-                      _illustStore.star(
-                          restrict: userSetting.defaultPrivateLike
-                              ? "private"
-                              : "public");
-                    }
-                    saveStore.saveImage(_aboutStore.illusts[index]);
-                  },
-                  child: PixivImage(
-                    _aboutStore.illusts[index].imageUrls.squareMedium,
-                    enableMemoryCache: false,
-                  ),
-                );
-              }, childCount: _aboutStore.illusts.length),
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3))
+          )
         ],
       ),
     );
