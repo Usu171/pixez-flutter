@@ -34,7 +34,6 @@ import 'package:pixez/page/comment/comment_store.dart';
 import 'package:pixez/page/report/report_items_page.dart';
 import 'package:pixez/supportor_plugin.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter/services.dart';
 
 enum CommentArtWorkType { ILLUST, NOVEL }
 
@@ -173,7 +172,7 @@ class _CommentPageState extends State<CommentPage> {
     return Container(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(I18n.of(context).view_comment),
+          title: Text('${I18n.of(context).view_comment}'),
         ),
         body: SafeArea(
           child: Column(
@@ -401,7 +400,7 @@ class _CommentPageState extends State<CommentPage> {
                                 ),
                                 child: TextField(
                                   controller: _editController,
-                                  maxLength: 10,
+                                  maxLength: 140,
                                   onChanged: (value) {
                                     setState(() {
                                       _commentText = value;
@@ -564,7 +563,8 @@ class _CommentPageState extends State<CommentPage> {
               final pos = box != null
                   ? box.localToGlobal(Offset.zero) & box.size
                   : null;
-              Share.share(selectionText, sharePositionOrigin: pos);
+              SharePlus.instance.share(
+                  ShareParams(text: selectionText, sharePositionOrigin: pos));
               return;
             }
             await SupportorPlugin.start(selectionText);

@@ -351,7 +351,8 @@ class _IllustDetailContentState extends State<IllustDetailContent> {
               final pos = box != null
                   ? box.localToGlobal(Offset.zero) & box.size
                   : null;
-              Share.share(selectionText, sharePositionOrigin: pos);
+              SharePlus.instance.share(
+                  ShareParams(text: selectionText, sharePositionOrigin: pos));
               return;
             }
             await SupportorPlugin.start(selectionText);
@@ -390,7 +391,7 @@ class _IllustDetailContentState extends State<IllustDetailContent> {
                       width: 4,
                     ),
                     Text(
-                      I18n.of(context).view_comment,
+                      '${I18n.of(context).view_comment}${data.commentCountText}',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ]),
